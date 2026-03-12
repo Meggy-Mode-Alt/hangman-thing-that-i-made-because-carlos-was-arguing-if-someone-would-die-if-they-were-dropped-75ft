@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework</title>
+    <style>
+        :root {
+            --bg: #1a1a1a;
+            --panel: #2d2d2d;
+            --accent: #00ffcc;
+            --fail: #ff4d4d;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: white;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        #controls {
+            width: 350px;
+            background: var(--panel);
+            padding: 20px;
+            border-right: 1px solid #444;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        h2 {
+            margin: 0 0 10px 0;
+            color: var(--accent);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: #bbb;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        button {
+            background: var(--accent);
+            color: black;
+            border: none;
+            padding: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #00d4aa;
+            transform: translateY(-2px);
+        }
+
+        /* Stats Display */
+        #stats {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            border: 1px solid #444;
+        }
+
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            color: var(--accent);
+        }
+
+        .danger {
+            color: var(--fail);
+        }
+
+        /* Canvas Area */
+        #viewport {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            background: radial-gradient(circle, #252525 0%, #111 100%);
+        }
+
+        canvas {
+            max-width: 100%;
+            height: 100%;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            text-align: right;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="controls">
+        <h2>Simulation Config</h2>
+
+        <div class="input-group">
+            <label>Rope Breaking Strength (N) <span id="ropeVal">35000</span></label>
+            <input type="range" id="ropeStr" min="5000" max="60000" value="35000">
+        </div>
+
+        <div class="input-group">
+            <label>Neck Strength (N) <span id="linkVal">350</span></label>
+            <input type="range" id="linkStr" min="1" max="500" value="350">
+        </div>
+
+        <div class="input-group">
+            <label>Rope Elasticity (Stiffness) <span id="stiffVal">15000</span></label>
+            <input type="range" id="stiffness" min="5000" max="40000" value="15000">
+        </div>
+
+        <div class="input-group">
+            <label>Weight (lb) <span id="weightVal">200</span></label>
+            <input type="range" id="weight" min="50" max="500" value="200">
+        </div>
+
+        <div id="stats">
+            <div class="stat-line">Status: <span id="status" class="value">Ready</span></div>
+            <div class="stat-line">Max Rope Load: <span id="maxRope" class="value">0 N</span></div>
+            <div class="stat-line">Max Link Shear: <span id="maxLink" class="value">0 N</span></div>
+            <div class="stat-line">Velocity: <span id="curVel" class="value">0 m/s</span></div>
+        </div>
+
+        <button onclick="resetSim()">DROP OBJECT</button>
+        <p style="font-size: 0.75rem; color: #777;">Drop: 75ft <br>Weight Distribution: 25% Top / 75%
+            Bottom</p>
+    </div>
+
+    <div id="viewport">
+        <div id="overlay">
+            <h1 id="failMsg" style="color: var(--fail); display:none;">MECHANICAL FAILURE</h1>
+        </div>
+        <canvas id="simCanvas"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
